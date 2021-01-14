@@ -706,7 +706,7 @@ void mem_bfs(gview_t<T>* snaph,
                             if (status[sid] == 0) {
                                 status[sid] = level + 1;
                                 ++frontier;
-                                //cout << " " << sid << endl;
+                                cout << " sid: " << sid << endl; //debug
                             }
                         }
                         delta_adjlist = delta_adjlist->get_next();
