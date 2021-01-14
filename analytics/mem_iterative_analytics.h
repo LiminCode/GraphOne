@@ -670,7 +670,7 @@ void mem_bfs(gview_t<T>* snaph,
     
 	double start1 = mywtime();
     //if (snaph->get_degree_out(root) == 0) { root = 0;}
-	status[root] = level;
+	status[root] = level; // root=1, status[1]=1
     
 	do {
 		frontier = 0;
@@ -682,12 +682,12 @@ void mem_bfs(gview_t<T>* snaph,
             degree_t local_degree = 0;
             degree_t delta_degree = 0;
 
-            delta_adjlist_t<T>* delta_adjlist;;
+            delta_adjlist_t<T>* delta_adjlist;
             T* local_adjlist = 0;
 		    
             if (top_down) {
                 #pragma omp for nowait
-				for (vid_t v = 0; v < v_count; v++) {
+				for (vid_t v = 0; v < v_count; v++) { // for every vertex
                     if (status[v] != level) continue;
                     
 					nebr_count     = snaph->get_degree_out(v);

@@ -46,6 +46,13 @@ void* sstream_func(void* arg)
 }
     
 // ------ VIEW CREATE/REGISTER API --------------
+/*
+* Static View
+* Create snapshot in real-time.
+* it is represented by an opaque handle that identifies the view composition, i.e.,
+* the non-archived edges and the latest adjacency list snapshot, and serves as input
+* to other static view APIs.
+*/
 template <class T>
 snap_t<T>* create_static_view(pgraph_t<T>* pgraph, index_t flag)
 {
@@ -59,6 +66,9 @@ snap_t<T>* create_static_view(pgraph_t<T>* pgraph, index_t flag)
     return snaph;
 }
 
+/*
+* A created handle should be deleted using this.
+*/
 template <class T>
 void delete_static_view(snap_t<T>* snaph) 
 {
@@ -66,6 +76,9 @@ void delete_static_view(snap_t<T>* snaph)
     delete snaph;
 }
 
+/*
+* Stream View
+*/
 template <class T>
 sstream_t<T>* reg_sstream_view(pgraph_t<T>* ugraph, typename callback<T>::sfunc func,
                                index_t flag, void* algo_meta = 0)

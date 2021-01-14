@@ -14,6 +14,7 @@ class gview_t {
     int             flag;
     typename callback<T>::sfunc   sstream_func; 
  public: 
+    //
     virtual degree_t get_nebrs_out(vid_t vid, T* ptr) {assert(0); return 0;}
     virtual degree_t get_nebrs_in (vid_t vid, T* ptr) {assert(0); return 0;}
     virtual degree_t get_degree_out(vid_t vid) {assert(0); return 0;}
