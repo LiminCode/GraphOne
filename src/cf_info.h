@@ -1,5 +1,7 @@
 #pragma once
-
+/*
+*  column_family info
+*/
 #include "type.h"
 #include "str.h"
 #include "prop_encoder.h"
@@ -13,10 +15,10 @@ inline char* gstrdup(const char* str)
 }
 /////////////////////////////////
 //One relationship or label
-class pinfo_t {
+class pinfo_t { // property_info
     public:
-    char*        p_name;
-    char*        p_longname;
+    char*        p_name; // property name
+    char*        p_longname; //property_long name
     propid_t     cf_id;
     propid_t     local_id;
 };

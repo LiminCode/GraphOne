@@ -1151,7 +1151,7 @@ void test_ingestion(const string& idir, const string& odir)
 {
     plaingraph_manager_t<T> manager;
     
-    manager.schema(_dir);
+    manager.schema(_dir); // set if directed
     //do some setup for plain graphs
     manager.setup_graph(_global_vcount);    
     manager.prep_graph2(idir, odir);
@@ -1269,12 +1269,15 @@ void test_serial_stream(const string& idir, const string& odir,
     pthread_join(sstreamh->thread, &ret);
 }
 
+/*
+* 
+*/
 void plain_test(vid_t v_count1, const string& idir, const string& odir, int job)
 {
     switch (job) {
         //plaingrah benchmark testing    
         case 0: 
-            test_ingestion<dst_id_t>(idir, odir);
+            test_ingestion<dst_id_t>(idir, odir); // run bfs
             //test_ingestion<snb_t>(idir, odir);
             break;
         case 1:
@@ -1292,7 +1295,7 @@ void plain_test(vid_t v_count1, const string& idir, const string& odir, int job)
         case 5:
             recover_test<dst_id_t>(odir);
             break;
-        case 6:
+        case 6://
             prior_snap_test<dst_id_t>(odir);
             break;
         case 7://SNB

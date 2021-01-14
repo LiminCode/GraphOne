@@ -76,7 +76,7 @@ GraphOne is designed to work with variety of input graph data. As of now, we onl
 ## Text Edge Data (With or Without Weights):
 If you have downloaded some popular Graph Data sets from the Internet, it is possbily in this format. 
 
-### Examaple 1: Data already contains IDs 
+### Example 1: Data already contains IDs 
 If you have downloaded subdomain graph, the data will look like following:
 ```
   0       28724358

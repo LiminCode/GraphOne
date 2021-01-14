@@ -71,18 +71,21 @@ class plaingraph_manager_t {
     void run_2hop();
 };
 
+/*
+* set the graph if directed.
+*/
 template <class T>
 void plaingraph_manager_t<T>::schema(int dir)
 {
     switch(dir) {
         case 0:
-            schema_plaingraph();
+            schema_plaingraph(); //undirected
             break;
         case 1:
-            schema_plaingraphd();
+            schema_plaingraphd(); //directed
             break;
         case 2:
-            schema_plaingraphuni();
+            schema_plaingraphuni(); //uni-directed
             break;
         default:
             assert(0);
@@ -90,7 +93,7 @@ void plaingraph_manager_t<T>::schema(int dir)
 }
 
 template <class T>
-void plaingraph_manager_t<T>::schema_plaingraph()
+void plaingraph_manager_t<T>::schema_plaingraph() //undirected graph
 {
     g->cf_info = new cfinfo_t*[2];
     g->p_info = new pinfo_t[2];
@@ -120,7 +123,7 @@ void plaingraph_manager_t<T>::schema_plaingraph()
 }
 
 template <class T>
-void plaingraph_manager_t<T>::schema_plaingraphd()
+void plaingraph_manager_t<T>::schema_plaingraphd() //directed graph
 {
     g->cf_info = new cfinfo_t*[2];
     g->p_info = new pinfo_t[2];
@@ -149,7 +152,7 @@ void plaingraph_manager_t<T>::schema_plaingraphd()
 }
 
 template <class T>
-void plaingraph_manager_t<T>::schema_plaingraphuni()
+void plaingraph_manager_t<T>::schema_plaingraphuni() //uni-directed graph
 {
     g->cf_info = new cfinfo_t*[2];
     g->p_info = new pinfo_t[2];

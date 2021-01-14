@@ -36,7 +36,7 @@ typedef uint64_t snapid_t ;
 typedef int32_t degree_t;
 #elif B32
 typedef uint8_t propid_t;
-typedef uint32_t vid_t;
+typedef uint32_t vid_t; //vertex id
 typedef uint32_t sid_t;
 typedef uint32_t eid_t;
 typedef uint64_t index_t;

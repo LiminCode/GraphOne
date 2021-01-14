@@ -17,18 +17,19 @@ class graph {
  public:
     //graphs and labels store.
     map <string, propid_t> str2pid;
-    cfinfo_t** cf_info;
-    pinfo_t *  p_info;
+    cfinfo_t** cf_info; // column family info
+    pinfo_t *  p_info; //relationship or label, "property info"
     
-    int          cf_count;
-    propid_t     p_count;
+    int          cf_count; //column family count
+    propid_t     p_count; // property count
 
     //Other information
     typekv_t* typekv;
-    string    odirname;
+    string    odirname; //out directory for store edge log
     
  public:
     graph();
+    // set out put directory, persist edge log 
     inline void set_odir(const string& odir) {
         odirname = odir;
         //snapfile = odir + "graph.snap";

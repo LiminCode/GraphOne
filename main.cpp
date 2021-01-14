@@ -17,12 +17,12 @@ void ldbc_test(const string& conf_file, const string& idir, const string& odir, 
 void darshan_test0(const string& conf_file, const string& idir, const string& odir);
 
 index_t residue = 0;
-int THD_COUNT = 0;
-vid_t _global_vcount = 0;
-index_t _edge_count = 0;
-int _dir = 0;//undirected
-int _persist = 0;//no
-int _source = 0;//text
+int THD_COUNT = 0; //system thread count
+vid_t _global_vcount = 0; //global vertex count
+index_t _edge_count = 0; // edge count
+int _dir = 0;//undirected, 1 is the graph is directed
+int _persist = 0;//no, if persist the edge log to out directory
+int _source = 0;//text, data source type. 0 for text files, 1 for binary files
 
 void print_usage() 
 {
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
     g = new graph; 
 	while ((o = getopt_long(argc, argv, "i:c:j:o:q:t:f:r:v:e:d:s:h", longopts, &index)) != -1) {
 		switch(o) {
-			case 'v':
+			case 'v': // get vertex count
 				#ifdef B64
                 sscanf(optarg, "%ld", &_global_vcount);
 				#elif B32
@@ -85,23 +85,23 @@ int main(int argc, char* argv[])
 				#endif
 				cout << "Global vcount = " << _global_vcount << endl;
 				break;
-			case 'h':
+			case 'h': //help
 				print_usage();
                 return 0;
                 break;
-			case 'i':
+			case 'i': //input directory, graph data comes from
 				idir = optarg;
 				cout << "input dir = " << idir << endl;
 				break;
-            case 'c':
+            case 'c': //plain or multi-graph, default plain .
                 category = atoi(optarg);
 				break;
-            case 'j':
+            case 'j': //job type
                 job = atoi(optarg);
 				break;
-			case 'o':
+			case 'o': //out put diretory, this option will also persist edge log
 				odir = optarg;
-                _persist = 1;
+                _persist = 1; // persist the edge log
 				cout << "output dir = " << odir << endl;
 				break;
             case 'q':
@@ -114,13 +114,13 @@ int main(int argc, char* argv[])
             case 'f':
                 typefile = optarg;
                 break;
-            case 'e':
+            case 'e': // edge count
                 sscanf(optarg, "%ld", &_edge_count);
                 break;
-            case 'd':
+            case 'd': //direction, 0 for undirected, 1 for directed, 2 for uni-directed
                 sscanf(optarg, "%d", &_dir);
                 break;
-            case 's':
+            case 's': // source graph data type, 0 for text files, 1 for binary files
                 sscanf(optarg, "%d", &_source);
                 break;
             case 'r':
@@ -134,9 +134,9 @@ int main(int argc, char* argv[])
 		}
 	}
     cout << "Threads Count = " << THD_COUNT << endl;
-    g->set_odir(odir);
+    g->set_odir(odir); //set out directory.
     switch (category) {
-        case 0:
+        case 0: //default
         plain_test(_global_vcount, idir, odir, job);
             break;
         case 1:

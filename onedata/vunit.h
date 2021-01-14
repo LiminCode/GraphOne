@@ -2,6 +2,13 @@
 
 #include "type.h"
 
+/*
+*   Adjacency list
+    in the multi-version degree array
+    contain the count of neighboring edges of each vertex.
+    When an edge is added or deleted for a vertex, a new entry is added for this vertex in the degree array in each epoch.
+    The degree nodes are shared across epochs.
+*/
 template <class T>
 class delta_adjlist_t {
 	delta_adjlist_t<T>* next;
