@@ -13,7 +13,7 @@ template <class T>
 class delta_adjlist_t {
 	delta_adjlist_t<T>* next;
     degree_t   max_count;
-	degree_t   count;
+	degree_t   count; //neighbor count
 	//T  adj_list;
 
  public:
@@ -34,7 +34,12 @@ class delta_adjlist_t {
     }
     inline degree_t get_maxcount() {return max_count;}
     inline void set_maxcount(degree_t value) {max_count = value;}
+    /*  here seems count points to a int32(8-byte) array list
+    * the struct of memory could be like:
+    * [count][v_id][v_id][v_id]...
+    */
 	inline T* get_adjlist() { return (T*)(&count + 1); }
+    //append on the tail 
 	inline void add_next(delta_adjlist_t<T>* ptr) {next = ptr; }
 	inline delta_adjlist_t<T>* get_next() { return next; }
     
@@ -140,6 +145,10 @@ inline degree_t get_delcount(sdegree_t sdegree) {
 #endif
 }
 
+/*
+* this snapT_t is the exactly implementation of "multi-version degree array"
+* in the paper Fig.5
+*/
 template <class T>
 class  snapT_t {
  public:
@@ -169,9 +178,10 @@ class vunit_t {
  public:
 	//uint16_t      vflag;
 	//uint16_t    max_size; //max count in delta adj list
-    snapT_t<T>*   snap_blob;
-	delta_adjlist_t<T>* delta_adjlist;
-	delta_adjlist_t<T>* adj_list;//Last chain
+    snapT_t<T>*   snap_blob; // multi-version degree array
+    //Vertex array
+	delta_adjlist_t<T>* delta_adjlist;// points to the first node of chain
+	delta_adjlist_t<T>* adj_list;//Last chain, points to the last node
 
 	inline void reset() {
 		//vflag = 0;
@@ -179,7 +189,8 @@ class vunit_t {
 		delta_adjlist = 0;
         adj_list = 0;
 	}
-    inline sdegree_t get_degree() {
+    // get the newest degree from degree array
+    inline sdegree_t get_degree() { 
         snapT_t<T>*   blob = snap_blob;
         sdegree_t sdegree;
         if (blob) {
@@ -193,7 +204,8 @@ class vunit_t {
         blob->degree.add_count -= blob->degree.del_count;
         blob->degree.del_count = 0;
 #endif
-    } 
+    }
+    // get the degree of snap_id, or newest if snap_id is bigger than the newest
     inline sdegree_t get_degree(snapid_t snap_id)
     {
         snapT_t<T>*   blob = snap_blob;
@@ -203,7 +215,7 @@ class vunit_t {
         }
         
         if (snap_id >= blob->snap_id) {
-			sdegree = blob->degree;
+			sdegree = blob->degree; // return the newest 
         } else {
             blob = blob->prev;
             while (blob && snap_id < blob->snap_id) {
@@ -225,7 +237,7 @@ class vunit_t {
 	inline delta_adjlist_t<T>* get_delta_adjlist() {
         return delta_adjlist;
     }
-    
+    // adj_list points to the last node, and delta_adjlist points to the first
 	inline void set_delta_adjlist(delta_adjlist_t<T>* adj_list1) {
         if (adj_list) {
 			adj_list->add_next(adj_list1);

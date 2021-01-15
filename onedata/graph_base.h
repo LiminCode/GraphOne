@@ -184,7 +184,7 @@ public:
 template <class T>
 class onekv_t {
  private:
-    T*     kv;
+    T*     kv; // T[max_vcount]
     tid_t  tid;
     vid_t  max_vcount;
     int    vtf;

@@ -555,10 +555,14 @@ void plaingraph_manager_t<T>::run_pr_simple()
     
     delete_static_view(snaph);
 }
+
+/*
+*   some data prepare operations for bfs.
+*/
 template <class T>
 void plaingraph_manager_t<T>::run_bfs(sid_t root/*=1*/)
 {
-    double start, end;
+    double start, end; // for time measuring
 
     pgraph_t<T>* pgraph1 = (pgraph_t<T>*)get_plaingraph();
     

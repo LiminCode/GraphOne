@@ -659,18 +659,24 @@ void mem_bfs_simple(gview_t<T>* snaph,
     print_bfs_summary(status, level, v_count);
 }
 
+
+/*
+*  status: also named level_array in this method's caller,
+*   is an array of char(uint8), equal to char[n], n = vcount.
+    This char[n] is all zero at first.
+
+*/
 template<class T>
-void mem_bfs(gview_t<T>* snaph,
-        uint8_t* status, sid_t root)
+void mem_bfs(gview_t<T>* snaph, uint8_t* status, sid_t root)
 {
-    int				level      = 1;
-	int				top_down   = 1;
+    int				level      = 1; //count level from 1
+	int				top_down   = 1; 
 	sid_t			frontier   = 0;
     sid_t           v_count    = snaph->get_vcount();
     
 	double start1 = mywtime();
     //if (snaph->get_degree_out(root) == 0) { root = 0;}
-	status[root] = level; // root=1, status[1]=1
+	status[root] = level; // root=1, status[1]=1, means always take vertex 1 as root
     
 	do {
 		frontier = 0;
@@ -688,11 +694,13 @@ void mem_bfs(gview_t<T>* snaph,
             if (top_down) {
                 #pragma omp for nowait
 				for (vid_t v = 0; v < v_count; v++) { // for every vertex
+                    //find the vertex belong to this level
                     if (status[v] != level) continue;
-                    
+                    //skip vertex doesn't have child
 					nebr_count     = snaph->get_degree_out(v);
                     if (0 == nebr_count) continue;
                     
+                    // get the neighbors array of current vertex (vid = v)
                     delta_adjlist  = snaph->get_nebrs_archived_out(v);
                     delta_degree   = nebr_count;
                     
@@ -702,11 +710,11 @@ void mem_bfs(gview_t<T>* snaph,
                         local_degree = delta_adjlist->get_nebrcount();
                         degree_t i_count = min(local_degree, delta_degree);
                         for (degree_t i = 0; i < i_count; ++i) {
-                            sid = get_sid(local_adjlist[i]);
-                            if (status[sid] == 0) {
+                            sid = get_sid(local_adjlist[i]); //vetex id
+                            if (status[sid] == 0) { // not read yet
                                 status[sid] = level + 1;
-                                ++frontier;
-                                cout << " sid: " << sid << endl; //debug
+                                ++frontier; // need to read next( = pushed to queue)
+                                cout << "add to next level "<<level+1<<" sid: " << sid << endl; //debug
                             }
                         }
                         delta_adjlist = delta_adjlist->get_next();

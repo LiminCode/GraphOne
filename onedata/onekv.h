@@ -1,10 +1,15 @@
 
 #pragma once
 /**************** SKV ******************/
+/*
+* for every type, there is a kv array.
+* the kv array's size is the count of all vertices, a vertex has or doesn't 
+* have this type is represented as kv[vid_t]==vid_t 
+*/
 template <class T>
 void onekv_t<T>::setup(tid_t t, vid_t a_max_vcount)
 {
-    tid = t;
+    tid = t; //type: t
     max_vcount = a_max_vcount;
     kv = (T*)malloc(sizeof(T)*max_vcount);
     memset(kv, INVALID_SID, sizeof(T)*max_vcount);
